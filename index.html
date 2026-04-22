@@ -110,13 +110,28 @@ button {
 
 <script>
 const SUPABASE_URL = "https://zhbguqmnwccrfityiizr.supabase.co/rest/v1/";
-const SUPABASE_KEY = "sb_publishable_vaw4MC8Jj5EI4tNSZUUb0Q_xQPq7R8N";
+const SUPABASE_KEY = "sb_publishable_vaw4MC8Jj5EI4tNS-ZUUb0Q_xQPq7R8N";
 
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 let user = null;
 let images = [];
 
+// CHECK SESSION AUTOMATIQUE
+async function checkUser() {
+  const { data } = await supabaseClient.auth.getSession();
+  user = data.session?.user;
+
+  if (user) {
+    document.getElementById("auth").style.display = "none";
+    document.getElementById("app").style.display = "block";
+    loadImages();
+  }
+}
+
+checkUser();
+
+// SIGN UP
 async function signUp() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -126,6 +141,7 @@ async function signUp() {
   else alert("Compte créé !");
 }
 
+// LOGIN
 async function signIn() {
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
@@ -141,7 +157,10 @@ async function signIn() {
   }
 }
 
+// LOAD IMAGES
 async function loadImages() {
+  if (!user) return;
+
   const { data } = await supabaseClient
     .from("images")
     .select("*")
@@ -151,6 +170,7 @@ async function loadImages() {
   render();
 }
 
+// RENDER
 function render() {
   const grid = document.getElementById("grid");
   grid.innerHTML = "";
@@ -173,6 +193,7 @@ function render() {
   }
 }
 
+// ADD IMAGE
 function addImage() {
   const input = document.createElement("input");
   input.type = "file";
@@ -180,12 +201,12 @@ function addImage() {
 
   input.onchange = async (e) => {
     const file = e.target.files[0];
-    if (!file) return;
+    if (!file || !user) return;
 
     const reader = new FileReader();
 
     reader.onload = async (ev) => {
-      const { data } = await supabaseClient
+      await supabaseClient
         .from("images")
         .insert([{ user_id: user.id, url: ev.target.result }]);
 
