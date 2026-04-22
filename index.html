@@ -81,14 +81,53 @@
 
   <!-- SCRIPT -->
   <script>
-    const grid = document.getElementById("grid");
+  const grid = document.getElementById("grid");
+  const addBtn = document.querySelector(".add-btn");
 
-    for (let i = 0; i < 9; i++) {
-      const div = document.createElement("div");
-      div.classList.add("grid-item");
-      grid.appendChild(div);
-    }
-  </script>
+  let currentIndex = 0;
+
+  // créer 9 cases
+  for (let i = 0; i < 9; i++) {
+    const div = document.createElement("div");
+    div.classList.add("grid-item");
+    grid.appendChild(div);
+  }
+
+  const items = document.querySelectorAll(".grid-item");
+
+  // créer input caché
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  addBtn.addEventListener("click", () => {
+    input.click();
+  });
+
+  input.addEventListener("change", (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (event) {
+      const img = document.createElement("img");
+      img.src = event.target.result;
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.objectFit = "cover";
+      img.style.borderRadius = "12px";
+
+      if (currentIndex < items.length) {
+        items[currentIndex].innerHTML = "";
+        items[currentIndex].appendChild(img);
+        currentIndex++;
+      }
+    };
+
+    reader.readAsDataURL(file);
+  });
+</script>
 
 </body>
 </html>
