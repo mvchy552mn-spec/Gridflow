@@ -1,1 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>GridFlow</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
+  <div class="app">
+
+    <!-- Header -->
+    <header>
+      <h1>GridFlow</h1>
+      <p>Design your perfect feed</p>
+    </header>
+
+    <!-- Grid -->
+    <div class="grid" id="grid"></div>
+
+    <!-- Add Button -->
+    <button class="add-btn">+</button>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #0F0F0F;
+  color: white;
+}
+
+/* Container */
+.app {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+}
+
+/* Header */
+header h1 {
+  font-size: 28px;
+}
+
+header p {
+  color: #888;
+  margin-top: 5px;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.grid-item {
+  background: #1F1F1F;
+  aspect-ratio: 1/1;
+  border-radius: 12px;
+}
+
+/* Button */
+.add-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: linear-gradient(135deg, #7C3AED, #4F46E5);
+  border: none;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  font-size: 30px;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(124, 58, 237, 0.6);
+} 
+
+const grid = document.getElementById("grid");
+
+// créer 9 cases
+for (let i = 0; i < 9; i++) {
+  const div = document.createElement("div");
+  div.classList.add("grid-item");
+  grid.appendChild(div);
+}
